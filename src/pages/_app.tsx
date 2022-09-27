@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="bg-brand-200 md:bg-brand-100 w-full flex flex-col h-full">
+    <div className="bg-brand-200 md:bg-brand-100 md:max-w-lg md:mx-auto w-full flex flex-col h-full">
       <Layout>
         <Component {...pageProps} />
       </Layout>

@@ -1,13 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { PrimaryButton } from '../components/buttons/primary'
+import { SecondaryButton } from '../components/buttons/secondary'
 import { Header } from '../components/header'
 import { SelectButtons } from '../components/inputs/select-buttons'
 import { TextField } from '../components/inputs/text-field'
-import { inviteCodeSchema } from '../schemas/inviteRedemption'
 import { registerSchema, RegisterSchema } from '../schemas/register'
 import { useAuthentication } from '../stores/authentication'
 import { trpc } from '../utils/trpc'
@@ -16,8 +15,6 @@ const RegisterPage: NextPage = () => {
   const router = useRouter()
 
   const authenticate = useAuthentication((state) => state.authenticate)
-
-  const { code } = router.query
 
   const {
     register,
@@ -85,19 +82,11 @@ const RegisterPage: NextPage = () => {
         )}
 
         <div className="flex flex-col mt-auto gap-4 w-full">
-          <button
-            disabled={registerMutation.isLoading}
-            role="submit"
-            className="bg-white text-brand-100 font-bold py-3 rounded-lg mt-auto"
-          >
-            CRIAR CONTA
-          </button>
+          <PrimaryButton loading={registerMutation.isLoading} type="submit">
+            REGISTER
+          </PrimaryButton>
 
-          <Link href="/login" passHref>
-            <a className="bg-transparent border-white border-2  text-center text-white font-bold py-3 rounded-lg">
-              FAZER LOGIN
-            </a>
-          </Link>
+          <SecondaryButton onClick={() => router.push({ ...router, pathname: '/login' })}>LOGIN</SecondaryButton>
         </div>
       </form>
     </>

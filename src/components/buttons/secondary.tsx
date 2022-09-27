@@ -5,11 +5,10 @@ import { ButtonProps } from './types'
 type Props = {
   loading?: boolean
   error?: string
-
   colorScheme?: 'brand' | 'white'
 } & ButtonProps
 
-export const PrimaryButton = ({
+export const SecondaryButton = ({
   children,
   error,
   disabled,
@@ -27,10 +26,10 @@ export const PrimaryButton = ({
         disabled={disabled || loading}
         onClick={onClick}
         className={classNames(
-          'disabled:opacity-70 font-bold border-2 py-3 rounded-lg mt-auto',
+          'disabled:opacity-70 font-bold py-3 bg-transparent border-2 rounded-lg mt-auto',
           {
-            'bg-white text-brand-100 border-white': colorScheme === 'white',
-            'bg-brand-100 text-white border-brand-100': colorScheme === 'brand',
+            'text-white border-white': colorScheme === 'white',
+            'text-brand-100 border-brand-100': colorScheme === 'brand',
           },
           className
         )}

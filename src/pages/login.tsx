@@ -3,6 +3,8 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import { PrimaryButton } from '../components/buttons/primary'
+import { SecondaryButton } from '../components/buttons/secondary'
 import { Header } from '../components/header'
 import { TextField } from '../components/inputs/text-field'
 import { loginSchema, LoginSchema } from '../schemas/login'
@@ -48,25 +50,11 @@ const LoginPage: NextPage = () => {
         )}
 
         <div className="flex flex-col mt-auto gap-4 w-full">
-          <button
-            disabled={loginMutation.isLoading}
-            role="submit"
-            className="bg-white text-center text-brand-100 font-bold py-3 rounded-lg"
-          >
-            FAZER LOGIN
-          </button>
+          <PrimaryButton loading={loginMutation.isLoading} type="submit">
+            LOGIN
+          </PrimaryButton>
 
-          <Link
-            href={{
-              pathname: '/register',
-              query: router.query,
-            }}
-            passHref
-          >
-            <a className="bg-transparent border-white border-2  text-center text-white font-bold py-3 rounded-lg">
-              CRIAR CONTA
-            </a>
-          </Link>
+          <SecondaryButton onClick={() => router.push({ ...router, pathname: '/register' })}>REGISTER</SecondaryButton>
         </div>
       </form>
     </>

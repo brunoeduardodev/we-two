@@ -35,7 +35,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   if (!signedIn || !clientSide) return <></>
 
   return (
-    <div className="w-full h-full max-h-screen  flex flex-col md:max-w-lg px-6 md:mx-auto bg-brand-200">
+    <div className="w-full h-full max-h-screen flex flex-col px-6 bg-brand-200">
       <Header variant="md" className="pt-4 mb-4" />
 
       <main className="w-full flex flex-col gap-8 pb-2 h-full overflow-y-auto flex-1">{children}</main>

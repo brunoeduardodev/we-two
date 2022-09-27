@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { PrimaryButton } from '../../components/buttons/primary'
 import { TextField } from '../../components/inputs/text-field'
 import { MainLayout } from '../../layouts/main'
 import { InviteRedemption, inviteRedemptionSchema } from '../../schemas/inviteRedemption'
@@ -12,40 +13,39 @@ import { trpc } from '../../utils/trpc'
 
 const SetCodePage: WithLayout<NextPage> = () => {
   const [code, setCode] = useState('')
+  const [error, setError] = useState('')
+
   const router = useRouter()
   const userId = useAuthentication((state) => state.user?.id)
 
-  const {
-    handleSubmit,
-    register,
-    setError,
-    formState: { errors },
-  } = useForm<InviteRedemption>({
-    resolver: zodResolver(inviteRedemptionSchema),
-  })
+  const schemaValidation = inviteRedemptionSchema.safeParse({ code })
+
+  const validationError = useMemo(() => {
+    if (!schemaValidation.success) {
+      return schemaValidation.error.errors[0].message
+    }
+
+    return ''
+  }, [code])
 
   const { isLoading } = trpc.invites.getInviteInfo.useQuery(
     { code },
     {
       onSuccess: (data) => {
         if (data.creatorId === userId) {
-          setError('code', { message: 'You cannot redeem your own code!' })
+          setError('You cannot redeem your own code!')
           return
         }
 
         router.push(`/redeem-code?code=${code}`)
       },
       onError: (error) => {
-        setError('code', { message: error.message })
+        setError(error.message)
       },
       retry: false,
-      enabled: !!code,
+      enabled: !validationError,
     }
   )
-
-  const onSubmit = ({ code }: InviteRedemption) => {
-    setCode(code)
-  }
 
   return (
     <>
@@ -54,17 +54,21 @@ const SetCodePage: WithLayout<NextPage> = () => {
 
         <p className="text-lg text-center font-bold">Please enter the code you are about to redeem</p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <TextField {...register('code')} label="Code" error={errors.code?.message} className="text-xl text-center" />
+        <TextField
+          label="Code"
+          value={code}
+          onChange={(event) => setCode(event.target.value)}
+          error={(code.length > 0 && validationError) || error}
+          className="text-xl text-center"
+        />
 
-          <button
-            disabled={isLoading && !!code}
-            role="submit"
-            className="bg-white text-brand-100 font-bold py-3 rounded-lg mt-auto"
-          >
-            REDEEM
-          </button>
-        </form>
+        <PrimaryButton
+          loading={!!code && !validationError && isLoading}
+          type="submit"
+          className="bg-white text-brand-100 font-bold py-3 rounded-lg mt-auto"
+        >
+          REDEEM
+        </PrimaryButton>
       </section>
     </>
   )

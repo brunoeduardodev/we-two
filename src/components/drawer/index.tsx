@@ -41,7 +41,7 @@ export const DrawerFooter = ({
       <PrimaryButton
         colorScheme="brand"
         className="w-full border-2 border-brand-100"
-        role="submit"
+        type="submit"
         loading={loading}
         disabled={disabled}
         onClick={onAction}
