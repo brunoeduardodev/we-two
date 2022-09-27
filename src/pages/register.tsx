@@ -15,6 +15,7 @@ const RegisterPage: NextPage = () => {
   const router = useRouter()
 
   const authenticate = useAuthentication((state) => state.authenticate)
+  const user = useAuthentication((state) => state.user)
 
   const {
     register,
@@ -42,6 +43,12 @@ const RegisterPage: NextPage = () => {
   const onSubmit = async (data: RegisterSchema) => {
     registerMutation.mutate(data)
   }
+
+  useEffect(() => {
+    if (user) {
+      router.push('/')
+    }
+  }, [router, user])
 
   return (
     <>

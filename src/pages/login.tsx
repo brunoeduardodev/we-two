@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { PrimaryButton } from '../components/buttons/primary'
 import { SecondaryButton } from '../components/buttons/secondary'
@@ -13,6 +14,7 @@ import { trpc } from '../utils/trpc'
 
 const LoginPage: NextPage = () => {
   const router = useRouter()
+  const user = useAuthentication((state) => state.user)
   const authenticate = useAuthentication((state) => state.authenticate)
 
   const {
@@ -33,6 +35,12 @@ const LoginPage: NextPage = () => {
       console.error({ message })
     },
   })
+
+  useEffect(() => {
+    if (user) {
+      router.push('/')
+    }
+  }, [router, user])
 
   const onSubmit = async (data: LoginSchema) => {
     loginMutation.mutate(data)
