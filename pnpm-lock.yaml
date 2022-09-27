@@ -25,6 +25,7 @@ specifiers:
   eslint-config-prettier: ^8.5.0
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-react: ^7.31.7
+  husky: ^8.0.1
   js-cookie: ^3.0.1
   jsonwebtoken: ^8.5.1
   next: 12.2.5
@@ -78,6 +79,7 @@ devDependencies:
   eslint-config-prettier: 8.5.0_eslint@8.23.0
   eslint-plugin-prettier: 4.2.1_tgumt6uwl2md3n6uqnggd6wvce
   eslint-plugin-react: 7.31.7_eslint@8.23.0
+  husky: 8.0.1
   postcss: 8.4.16
   prettier: 2.7.1
   prisma: 4.3.1
@@ -1658,6 +1660,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+
+  /husky/8.0.1:
+    resolution: {integrity: sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /ignore/5.2.0:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}
