@@ -78,16 +78,12 @@ const computeRegistryBalance = (registry: PopulatedRegistry, user: User) => {
 
 export const registriesRouter = t.router({
   addPurchase: t.procedure
-    .use(ensureAuthentication)
+    .use(ensurePartnered('You need a partner to add a purchase'))
     .input(addRegistrySchema)
     .mutation(async ({ ctx, input }) => {
       const { session } = ctx
       const { category, payer, entries, label } = input
       let payerId = session.user.id
-
-      if (payer === 'partner' && !session.user.partner?.id) {
-        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Should have a partner to choose that' })
-      }
 
       if (payer === 'partner') {
         payerId = session.user.partner!.id
@@ -129,7 +125,7 @@ export const registriesRouter = t.router({
     }),
 
   addTransfer: t.procedure
-    .use(ensurePartnered)
+    .use(ensurePartnered('You need a partner to send a transfer'))
     .input(sendTransferSchema)
     .mutation(async ({ ctx, input }) => {
       const { from, value } = input
@@ -160,7 +156,7 @@ export const registriesRouter = t.router({
     }),
 
   getRegistries: t.procedure
-    .use(ensurePartnered)
+    .use(ensurePartnered('You need a partner to have registries'))
     .input(getRegistriesSchema)
     .query(async ({ ctx, input }) => {
       const { user } = ctx.session
@@ -221,8 +217,10 @@ export const registriesRouter = t.router({
       return registries.map((registry) => computeRegistryBalance(registry, user))
     }),
 
-  getBalance: t.procedure.use(ensurePartnered).query(async ({ ctx }) => {
+  getBalance: t.procedure.use(ensureAuthentication()).query(async ({ ctx }) => {
     const { user } = ctx.session
+
+    if (!user.partner) return 0
 
     const allRegistries = await prisma.registry.findMany({
       where: {
@@ -258,7 +256,7 @@ export const registriesRouter = t.router({
   }),
 
   getRegistry: t.procedure
-    .use(ensureAuthentication)
+    .use(ensureAuthentication())
     .input(seeRegistry)
     .query(async ({ ctx, input }) => {
       const { id } = input

@@ -1,5 +1,6 @@
 import { PopulatedPurchaseRegistry } from '../../server/routers/registries'
 import { useAuthentication } from '../../stores/authentication'
+import { parsePronoun } from '../../utils/pronouns'
 
 type Props = {
   registry: PopulatedPurchaseRegistry
@@ -8,7 +9,7 @@ type Props = {
 export const Purchase = ({ registry }: Props) => {
   const user = useAuthentication((state) => state.user)
 
-  const agent = user!.id === registry.purchase.payerId ? 'You' : 'He'
+  const agent = user!.id === registry.purchase.payerId ? 'You' : parsePronoun(user?.partner?.pronoun).he
 
   return (
     <div className="flex text-sm flex-col text-brand-100 font-bold ">

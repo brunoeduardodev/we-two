@@ -6,6 +6,8 @@ import { trpc } from '../../../utils/trpc'
 import { Controller, useForm } from 'react-hook-form'
 import { SendTransfer, sendTransferSchema } from '../../../schemas/sendTransfer'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuthentication } from '../../../stores/authentication'
+import { parsePronoun } from '../../../utils/pronouns'
 
 type Props = {
   isOpen: boolean
@@ -19,6 +21,8 @@ export const SendTransferDrawer = ({ isOpen, onClose }: Props) => {
     control,
     formState: { errors },
   } = useForm<SendTransfer>({ resolver: zodResolver(sendTransferSchema) })
+
+  const user = useAuthentication((state) => state.user)
 
   const sendTransferMutation = trpc.registries.addTransfer.useMutation({
     onSuccess: onClose,
@@ -59,7 +63,7 @@ export const SendTransferDrawer = ({ isOpen, onClose }: Props) => {
                 },
                 {
                   id: 'partner',
-                  label: 'Him',
+                  label: parsePronoun(user?.partner?.pronoun).him,
                 },
               ]}
             />
