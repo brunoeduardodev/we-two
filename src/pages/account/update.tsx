@@ -74,7 +74,7 @@ const UpdateProfilePage: WithLayout<NextPage> = () => {
           )}
         />
 
-        <PrimaryButton loading={updateMutation.isLoading} error={updateMutation.error?.message}>
+        <PrimaryButton type="submit" loading={updateMutation.isLoading} error={updateMutation.error?.message}>
           UPDATE
         </PrimaryButton>
       </form>
