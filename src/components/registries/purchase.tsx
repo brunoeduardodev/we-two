@@ -9,7 +9,7 @@ type Props = {
 export const Purchase = ({ registry }: Props) => {
   const user = useAuthentication((state) => state.user)
 
-  const agent = user!.id === registry.purchase.payerId ? 'You' : parsePronoun(user?.partner?.pronoun).he
+  const agent = user!.id === registry.purchase.payerId ? 'You' : parsePronoun(user?.partner?.pronoun).He
 
   return (
     <div className="flex text-sm flex-col text-brand-100 font-bold ">

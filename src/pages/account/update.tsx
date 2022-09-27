@@ -36,7 +36,7 @@ const UpdateProfilePage: WithLayout<NextPage> = () => {
           {...register('name')}
           defaultValue={currentUser.name}
           type="text"
-          label="Nome"
+          label="Name"
           error={errors.name?.message}
         />
         <TextField
@@ -59,15 +59,15 @@ const UpdateProfilePage: WithLayout<NextPage> = () => {
               choices={[
                 {
                   id: 'he',
-                  label: 'Ele',
+                  label: 'He',
                 },
                 {
                   id: 'she',
-                  label: 'Ela',
+                  label: 'She',
                 },
                 {
                   id: 'they',
-                  label: 'Elu',
+                  label: 'They',
                 },
               ]}
             />

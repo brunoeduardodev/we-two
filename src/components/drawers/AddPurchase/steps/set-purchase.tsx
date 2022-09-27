@@ -1,5 +1,7 @@
 import { Controller, useForm } from 'react-hook-form'
 import { PurchaseInfo } from '..'
+import { useAuthentication } from '../../../../stores/authentication'
+import { parsePronoun } from '../../../../utils/pronouns'
 import { DrawerBody, DrawerFooter, DrawerHeader } from '../../../drawer'
 import { SelectButtons } from '../../../inputs/select-buttons'
 import { TextField } from '../../../inputs/text-field'
@@ -11,6 +13,8 @@ type Props = {
 
 export const SetPurchaseStep = ({ onClose, onSetPurchaseInfo }: Props) => {
   const { handleSubmit, register, control } = useForm<PurchaseInfo>()
+
+  const user = useAuthentication((state) => state.user)
 
   const onSubmit = (data: PurchaseInfo) => {
     onSetPurchaseInfo(data)
@@ -30,7 +34,7 @@ export const SetPurchaseStep = ({ onClose, onSetPurchaseInfo }: Props) => {
           labelClassName="text-brand-100"
         />
 
-        <label className={'text-brand-100 font-bold'}>Who Paid?</label>
+        <label className={'text-brand-100 font-bold'}>Who Sent?</label>
 
         <Controller
           name="payer"
@@ -45,7 +49,7 @@ export const SetPurchaseStep = ({ onClose, onSetPurchaseInfo }: Props) => {
                 },
                 {
                   id: 'partner',
-                  label: 'Him',
+                  label: parsePronoun(user?.partner?.pronoun).Him,
                 },
               ]}
             />

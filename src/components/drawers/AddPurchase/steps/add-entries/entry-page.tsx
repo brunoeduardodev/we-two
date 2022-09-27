@@ -4,6 +4,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { FiArrowLeft, FiArrowRight, FiTrash } from 'react-icons/fi'
 import { useEntriesStore } from '.'
 import { AddEntry, addEntrySchema } from '../../../../../schemas/addRegistry'
+import { useAuthentication } from '../../../../../stores/authentication'
+import { parsePronoun } from '../../../../../utils/pronouns'
 import { IconButton } from '../../../../buttons/icon-button'
 import { PrimaryButton } from '../../../../buttons/primary'
 import { SelectButtons } from '../../../../inputs/select-buttons'
@@ -23,6 +25,8 @@ type Props = {
 export const EntryPage = ({ entry, onAddEntry, onUpdateEntry, onRemove, onBack, onNext }: Props) => {
   const page = useEntriesStore((state) => state.page)
   const total = useEntriesStore((state) => state.entries.length)
+
+  const user = useAuthentication((state) => state.user)
 
   const {
     register,
@@ -97,7 +101,7 @@ export const EntryPage = ({ entry, onAddEntry, onUpdateEntry, onRemove, onBack, 
               },
               {
                 id: 'partner',
-                label: 'Him',
+                label: parsePronoun(user?.partner?.pronoun).Him,
               },
             ]}
           />

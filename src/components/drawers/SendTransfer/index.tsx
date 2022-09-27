@@ -63,7 +63,7 @@ export const SendTransferDrawer = ({ isOpen, onClose }: Props) => {
                 },
                 {
                   id: 'partner',
-                  label: parsePronoun(user?.partner?.pronoun).him,
+                  label: parsePronoun(user?.partner?.pronoun).Him,
                 },
               ]}
             />

@@ -47,9 +47,9 @@ const RegisterPage: NextPage = () => {
     <>
       <Header variant="lg" className="mb-4 pt-12 px-6" />
       <form onSubmit={handleSubmit(onSubmit)} className="w-full flex-1 h-full flex flex-col gap-4 pb-12 px-6">
-        <TextField {...register('name')} type="text" label="Nome" error={errors.name?.message} />
+        <TextField {...register('name')} type="text" label="Name" error={errors.name?.message} />
         <TextField {...register('email')} type="email" label="Email" error={errors.email?.message} />
-        <TextField {...register('password')} type="password" label="Senha" error={errors.password?.message} />
+        <TextField {...register('password')} type="password" label="Password" error={errors.password?.message} />
 
         <div className="w-full h-[2px] bg-white rounded-full" />
 
@@ -62,15 +62,15 @@ const RegisterPage: NextPage = () => {
               choices={[
                 {
                   id: 'he',
-                  label: 'Ele',
+                  label: 'He',
                 },
                 {
                   id: 'she',
-                  label: 'Ela',
+                  label: 'She',
                 },
                 {
                   id: 'they',
-                  label: 'Elu',
+                  label: 'They',
                 },
               ]}
             />
