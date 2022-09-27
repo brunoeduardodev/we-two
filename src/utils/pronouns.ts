@@ -30,7 +30,7 @@ export const parsePronoun = (pronoun?: Pronoun): ParsedPronoun => {
       He: 'She',
 
       him: 'her',
-      Him: 'her',
+      Him: 'Her',
 
       his: 'hers',
       His: 'Hers',
@@ -42,7 +42,7 @@ export const parsePronoun = (pronoun?: Pronoun): ParsedPronoun => {
     He: 'They',
 
     him: 'them',
-    Him: 'them',
+    Him: 'Them',
 
     his: 'their',
     His: 'Their',
