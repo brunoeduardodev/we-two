@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { FiUser } from 'react-icons/fi'
 import { MainLayout } from '../../layouts/main'
@@ -9,6 +10,7 @@ import { trpc } from '../../utils/trpc'
 
 const AccountPage: WithLayout<NextPage> = () => {
   const user = useAuthentication((state) => state.user)
+  const logout = useAuthentication((state) => state.logout)
   const setUser = useAuthentication((state) => state.setUser)
 
   const { data: userData } = trpc.user.getSelf.useQuery()
@@ -18,6 +20,10 @@ const AccountPage: WithLayout<NextPage> = () => {
       setUser(userData)
     }
   }, [userData, setUser])
+
+  const onSignOut = () => {
+    logout()
+  }
 
   return (
     <>
@@ -58,9 +64,9 @@ const AccountPage: WithLayout<NextPage> = () => {
 
         <div className="h-[1px] w-full bg-white" />
 
-        <Link href="/login">
-          <a className="w-full text-center">Sign Out</a>
-        </Link>
+        <p onClick={onSignOut} className="w-full cursor-pointer text-center">
+          Sign Out
+        </p>
       </section>
     </>
   )

@@ -11,6 +11,7 @@ type Authentication = {
 
   authenticate: (data: { token: string; user: SafeUser }) => void
   setUser: (data: SafeUser) => void
+  logout: () => void
 }
 
 export const useAuthentication = create(
