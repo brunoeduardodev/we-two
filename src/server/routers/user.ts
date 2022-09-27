@@ -5,17 +5,19 @@ import { safeUserSelect } from '../selects/user'
 import { t } from '../trpc'
 
 export const userRouter = t.router({
-  getSelf: t.procedure.use(ensureAuthentication).query(async ({ ctx }) => {
-    const user = await prisma.user.findUnique({
-      select: safeUserSelect,
-      where: { id: ctx.session.user.id },
-    })
+  getSelf: t.procedure
+    .use(ensureAuthentication('You need to be authenticated to get self information'))
+    .query(async ({ ctx }) => {
+      const user = await prisma.user.findUnique({
+        select: safeUserSelect,
+        where: { id: ctx.session.user.id },
+      })
 
-    return user
-  }),
+      return user
+    }),
 
   updateSelf: t.procedure
-    .use(ensureAuthentication)
+    .use(ensureAuthentication('You need to be authenticated to update self information'))
     .input(updateSelfSchema)
     .mutation(async ({ ctx, input }) => {
       const { session } = ctx

@@ -9,43 +9,45 @@ import { ensureAuthentication } from '../middlewares/authenticated'
 const ONE_WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000
 
 export const invitesRouter = t.router({
-  generateInvite: t.procedure.use(ensureAuthentication).mutation(async ({ ctx }) => {
-    const { session } = ctx
+  generateInvite: t.procedure
+    .use(ensureAuthentication('You need to be authenticated to generate an invite'))
+    .mutation(async ({ ctx }) => {
+      const { session } = ctx
 
-    let code = ''
-    let codeExists = true
+      let code = ''
+      let codeExists = true
 
-    const existingInvite = await prisma.invite.findFirst({
-      where: {
-        creatorId: session.user.id,
-        expiredAt: null,
-      },
-    })
+      const existingInvite = await prisma.invite.findFirst({
+        where: {
+          creatorId: session.user.id,
+          expiredAt: null,
+        },
+      })
 
-    if (existingInvite) {
-      return existingInvite
-    }
+      if (existingInvite) {
+        return existingInvite
+      }
 
-    do {
-      code = crypto.randomBytes(3).toString('hex').toUpperCase()
-      codeExists = !!(await prisma.invite.findFirst({ where: { code, expiredAt: null } }))
-    } while (codeExists)
+      do {
+        code = crypto.randomBytes(3).toString('hex').toUpperCase()
+        codeExists = !!(await prisma.invite.findFirst({ where: { code, expiredAt: null } }))
+      } while (codeExists)
 
-    const expiresAt = new Date(new Date().getTime() + ONE_WEEK_IN_MS)
+      const expiresAt = new Date(new Date().getTime() + ONE_WEEK_IN_MS)
 
-    const invite = await prisma.invite.create({
-      data: {
-        code,
-        creatorId: session.user.id,
-        expiresAt,
-      },
-    })
+      const invite = await prisma.invite.create({
+        data: {
+          code,
+          creatorId: session.user.id,
+          expiresAt,
+        },
+      })
 
-    return invite
-  }),
+      return invite
+    }),
 
   redeemInvite: t.procedure
-    .use(ensureAuthentication)
+    .use(ensureAuthentication('You need to be authenticated to redeem an invite'))
     .input(inviteRedemptionSchema)
     .mutation(async ({ input, ctx }) => {
       const { session } = ctx
