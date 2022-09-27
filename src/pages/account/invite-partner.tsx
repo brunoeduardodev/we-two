@@ -4,6 +4,7 @@ import { FiShare } from 'react-icons/fi'
 import { MainLayout } from '../../layouts/main'
 import { WithLayout } from '../../types/next'
 import { trpc } from '../../utils/trpc'
+import { getBaseUrl } from '../../utils/url'
 
 const InvitePartnerPage: WithLayout<NextPage> = () => {
   const {
@@ -20,9 +21,11 @@ const InvitePartnerPage: WithLayout<NextPage> = () => {
 
   const handleShare = () => {
     navigator.share({
-      url: `http://localhost:3000/redeem-code?code=${data?.code}`,
+      url: `${getBaseUrl()}/redeem-code?code=${data?.code}`,
       title: 'WeTwo Partner Code',
-      text: `Hey, my invitation code to WeTwo is ${data?.code}!\nAdd my code there or just click on this link: http://localhost:3000/redeem-code?code=${data?.code}`,
+      text: `Hey, my invitation code to WeTwo is ${
+        data?.code
+      }!\nAdd my code there or just click on this link: ${getBaseUrl()}/redeem-code?code=${data?.code}`,
     })
   }
 

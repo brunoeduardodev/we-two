@@ -8,15 +8,7 @@ import Cookies from 'js-cookie'
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 import type { AppRouter } from '../server/routers/_app'
 import { getToken } from './jwt'
-
-function getBaseUrl() {
-  if (typeof window !== 'undefined') {
-    return ''
-  }
-
-  // assume localhost
-  return `http://localhost:${process.env.PORT ?? 3000}`
-}
+import { getBaseUrl } from './url'
 
 /**
  * Extend `NextPageContext` with meta data that can be picked up by `responseMeta()` when server-side rendering
