@@ -29,7 +29,7 @@ const Home: WithLayout<NextPage> = () => {
       <section className="flex flex-col w-full overflow-hidden items-center gap-4">
         <h2 className="text-2xl text-white font-bold">Last Registries</h2>
 
-        <div className="flex flex-col overflow-hidden bg-white w-full p-4 rounded-lg overflow-y-auto divide-y divide-brand-200">
+        <div className="flex flex-col overflow-hidden bg-white w-full p-4 rounded-lg overflow-y-auto divide-y divide-brand-200 text-brand-100">
           <QueryContainer
             isLoading={registriesQuery.isLoading}
             error={registriesQuery.error?.message}

@@ -16,8 +16,8 @@ const RegistriesPage: WithLayout<NextPage> = () => {
 
   return (
     <>
-      <section className="h-full max-h-24 overflow-hidden bg-white w-full rounded-lg overflow-y-auto divide-y divide-brand-200">
-        <div className="h-full overflow-hidden bg-white w-full p-4 rounded-lg overflow-y-auto divide-y divide-brand-200">
+      <section className="h-full overflow-hidden bg-white w-full rounded-lg overflow-y-auto divide-y divide-brand-200">
+        <div className="h-full text-brand-100 overflow-hidden bg-white w-full p-4 rounded-lg overflow-y-auto divide-y divide-brand-200">
           <QueryContainer
             isLoading={isLoading}
             error={error?.message}

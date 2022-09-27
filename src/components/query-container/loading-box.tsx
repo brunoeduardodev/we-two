@@ -10,12 +10,12 @@ export const LoadingBox = ({ size, message }: Props) => {
   return (
     <div className="flex flex-col gap-3 w-full h-full items-center justify-center p-2">
       <FiLoader
-        className={classNames('text-brand-100 animate-spin', {
+        className={classNames('animate-spin', {
           'text-2xl': size === 'sm',
           'text-3xl': size === 'md',
         })}
       />
-      {message && <p className="text-brand-100 font-bold">{message}</p>}
+      {message && <p className="font-bold">{message}</p>}
     </div>
   )
 }

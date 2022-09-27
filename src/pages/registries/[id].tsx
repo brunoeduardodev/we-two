@@ -1,6 +1,7 @@
 import { DivisionType } from '@prisma/client'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { EmptyBox, ErrorBox, LoadingBox, QueryContainer } from '../../components/query-container'
 import { MainLayout } from '../../layouts/main'
 import { PopulatedPurchaseRegistry, PopulatedTransferRegistry } from '../../server/routers/registries'
 import { useAuthentication } from '../../stores/authentication'
@@ -103,16 +104,18 @@ export const RegistryPage: WithLayout<NextPage> = () => {
 
   return (
     <section className="flex flex-col w-full items-center  text-white font-bold">
-      A
-      {isLoading ? (
-        'Loading...'
-      ) : isError ? (
-        'Error: ' + error.message
-      ) : data.purchase ? (
-        <PurchaseDetails registry={data as PopulatedPurchaseRegistry} />
-      ) : (
-        <TransferDetails registry={data as PopulatedTransferRegistry} />
-      )}
+      <QueryContainer
+        isLoading={isLoading}
+        error={error?.message}
+        LoaderComponent={<LoadingBox size="md" message="Loading your registries..." />}
+        ErrorComponent={<ErrorBox message={`Couldn't load your recent registries: ${error?.message}`} />}
+      >
+        {data?.purchase ? (
+          <PurchaseDetails registry={data as PopulatedPurchaseRegistry} />
+        ) : (
+          <TransferDetails registry={data as PopulatedTransferRegistry} />
+        )}
+      </QueryContainer>
     </section>
   )
 }
