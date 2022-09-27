@@ -64,7 +64,7 @@ const Home: WithLayout<NextPage> = () => {
                 ? 'You are fine'
                 : balanceQuery.data < 0
                 ? `You owe ${parsePronoun(user?.partner?.pronoun).Him} $${balanceQuery.data * -1}`
-                : `${parsePronoun(user?.partner?.pronoun).He} owes you $${balanceQuery.data}}`}
+                : `${parsePronoun(user?.partner?.pronoun).He} owes you $${balanceQuery.data}`}
             </>
           </QueryContainer>
         </div>

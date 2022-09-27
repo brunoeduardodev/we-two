@@ -1,6 +1,7 @@
 import { Entry, Purchase, PurchaseCategory, Registry, Transfer, User } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { addRegistrySchema } from '../../schemas/addRegistry'
+import { deleteRegistrySchema } from '../../schemas/deleteRegistry'
 import { getRegistriesSchema } from '../../schemas/getRegistries'
 import { seeRegistry } from '../../schemas/seeRegistry'
 import { sendTransferSchema } from '../../schemas/sendTransfer'
@@ -181,6 +182,8 @@ export const registriesRouter = t.router({
           },
         },
         where: {
+          deletedAt: null,
+
           AND: [
             {
               OR: [
@@ -224,6 +227,8 @@ export const registriesRouter = t.router({
 
     const allRegistries = await prisma.registry.findMany({
       where: {
+        deletedAt: null,
+
         OR: [
           {
             creatorId: user.id,
@@ -261,8 +266,8 @@ export const registriesRouter = t.router({
     .query(async ({ ctx, input }) => {
       const { id } = input
 
-      const registry = await prisma.registry.findUnique({
-        where: { id },
+      const registry = await prisma.registry.findFirst({
+        where: { id, deletedAt: null },
         include: {
           creator: true,
           purchase: {
@@ -286,5 +291,21 @@ export const registriesRouter = t.router({
       }
 
       return computeRegistryBalance(registry, ctx.session.user)
+    }),
+
+  deleteRegistry: t.procedure
+    .use(ensurePartnered())
+    .input(deleteRegistrySchema)
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input
+
+      await prisma.registry.update({
+        where: {
+          id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      })
     }),
 })
