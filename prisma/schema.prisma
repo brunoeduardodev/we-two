@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Pronoun {
+  he
+  she
+  they
+}
+
+enum DivisionType {
+  creator
+  partner
+  half
+}
+
+model Invite {
+  id String @id @default(uuid())
+
+  code String
+
+  creator  User  @relation("InviteCreation", fields: [creatorId], references: [id])
+  receiver User? @relation("InviteReceiving", fields: [receiverId], references: [id])
+
+  receiverId String?
+  creatorId  String
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  expiredAt DateTime?
+}
+
+model User {
+  id String @id @default(uuid())
+
+  name     String
+  email    String @unique
+  password String
+
+  pronoun Pronoun
+
+  partner     User?   @relation("Partner", fields: [partnerId], references: [id])
+  partneredBy User?   @relation("Partner")
+  partnerId   String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdRegistries Registry[] @relation("RegistryCreation")
+  paidPurchases     Purchase[]
+
+  createdInvites  Invite[] @relation("InviteCreation")
+  receivedInvites Invite[] @relation("InviteReceiving")
+
+  createdTransfers  Transfer[] @relation("TransferCreation")
+  receivedTransfers Transfer[] @relation("TransferReceiving")
+}
+
+model PurchaseCategory {
+  id       String     @id @default(uuid())
+  name     String     @unique
+  Purchase Purchase[]
+}
+
+enum RegistryType {
+  purchase
+  transfer
+}
+
+model Registry {
+  id String @id @default(uuid())
+
+  creator User @relation("RegistryCreation", fields: [creatorId], references: [id])
+
+  label String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  creatorId String
+
+  userId String?
+
+  purchase Purchase?
+  transfer Transfer?
+}
+
+model Transfer {
+  id String @id @default(uuid())
+
+  from     User     @relation("TransferCreation", fields: [fromId], references: [id])
+  to       User     @relation("TransferReceiving", fields: [toId], references: [id])
+  registry Registry @relation(fields: [registryId], references: [id])
+
+  value Float
+
+  registryId String @unique
+  toId       String
+  fromId     String
+}
+
+model Purchase {
+  id    String @id @default(uuid())
+  payer User   @relation(fields: [payerId], references: [id])
+
+  category PurchaseCategory @relation(fields: [purchaseCategoryId], references: [id])
+
+  label String?
+
+  purchaseCategoryId String
+  payerId            String
+  entries            Entry[]
+  registry           Registry @relation(fields: [registryId], references: [id])
+  registryId         String   @unique
+}
+
+model Entry {
+  id String @id @default(uuid())
+
+  label String?
+
+  value        Float
+  divisionType DivisionType
+
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+  purchaseId String
+}
