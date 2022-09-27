@@ -13,5 +13,16 @@ export const ensurePartnered = t.middleware(async ({ ctx, next }) => {
     throw new TRPCError({ code: 'FORBIDDEN' })
   }
 
-  return next({ ctx: { ...ctx, session: ctx.session } })
+  return next({
+    ctx: {
+      ...ctx,
+      session: {
+        ...ctx.session,
+        user: {
+          ...ctx.session.user,
+          partner: ctx.session.user.partner,
+        },
+      },
+    },
+  })
 })

@@ -99,10 +99,11 @@ export const RegistryPage: WithLayout<NextPage> = () => {
   const router = useRouter()
   const id = router.query.id as string
 
-  const { isLoading, data, isError, error } = trpc.registries.getRegistry.useQuery({ id })
+  const { isLoading, data, isError, error } = trpc.registries.getRegistry.useQuery({ id }, { retry: 0 })
 
   return (
     <section className="flex flex-col w-full items-center  text-white font-bold">
+      A
       {isLoading ? (
         'Loading...'
       ) : isError ? (

@@ -4,7 +4,7 @@ import { addRegistrySchema } from '../../schemas/addRegistry'
 import { getRegistriesSchema } from '../../schemas/getRegistries'
 import { seeRegistry } from '../../schemas/seeRegistry'
 import { sendTransferSchema } from '../../schemas/sendTransfer'
-import { ensureAuthentication } from '../middlewares/authenticated'
+import { ensureAuthentication, ensurePartnered } from '../middlewares/authenticated'
 import { prisma } from '../prisma'
 import { t } from '../trpc'
 
@@ -129,15 +129,11 @@ export const registriesRouter = t.router({
     }),
 
   addTransfer: t.procedure
-    .use(ensureAuthentication)
+    .use(ensurePartnered)
     .input(sendTransferSchema)
     .mutation(async ({ ctx, input }) => {
       const { from, value } = input
       const { user } = ctx.session
-
-      if (!user.partner?.id) {
-        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Should have a partner to choose that' })
-      }
 
       let fromId = user.id
       let toId = user.partner.id
@@ -164,7 +160,7 @@ export const registriesRouter = t.router({
     }),
 
   getRegistries: t.procedure
-    .use(ensureAuthentication)
+    .use(ensurePartnered)
     .input(getRegistriesSchema)
     .query(async ({ ctx, input }) => {
       const { user } = ctx.session
@@ -225,7 +221,7 @@ export const registriesRouter = t.router({
       return registries.map((registry) => computeRegistryBalance(registry, user))
     }),
 
-  getBalance: t.procedure.use(ensureAuthentication).query(async ({ ctx }) => {
+  getBalance: t.procedure.use(ensurePartnered).query(async ({ ctx }) => {
     const { user } = ctx.session
 
     const allRegistries = await prisma.registry.findMany({
