@@ -8,7 +8,7 @@ type Props = {
 
 export const LoadingBox = ({ size, message }: Props) => {
   return (
-    <div className="flex flex-col gap-3 w-full h-full items-center justify-center p-2">
+    <div className="flex flex-col text-center gap-3 w-full h-full items-center justify-center p-2">
       <FiLoader
         className={classNames('animate-spin', {
           'text-2xl': size === 'sm',
