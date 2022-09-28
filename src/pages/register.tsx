@@ -8,15 +8,15 @@ import { SecondaryButton } from '../components/buttons/secondary'
 import { Header } from '../components/header'
 import { SelectButtons } from '../components/inputs/select-buttons'
 import { TextField } from '../components/inputs/text-field'
+import { UnauthenticatedLayout } from '../layouts/unauthenticated'
 import { registerSchema, RegisterSchema } from '../schemas/register'
 import { useAuthentication } from '../stores/authentication'
+import { WithLayout } from '../types/next'
 import { trpc } from '../utils/trpc'
 
-const RegisterPage: NextPage = () => {
+const RegisterPage: WithLayout<NextPage> = () => {
   const router = useRouter()
-
   const authenticate = useAuthentication((state) => state.authenticate)
-  const user = useAuthentication((state) => state.user)
 
   const {
     register,
@@ -45,60 +45,53 @@ const RegisterPage: NextPage = () => {
     registerMutation.mutate(data)
   }
 
-  useEffect(() => {
-    if (user) {
-      router.push('/')
-    }
-  }, [router, user])
-
   return (
-    <>
-      <Header variant="lg" className="mb-4 pt-12 px-6" />
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full flex-1 h-full flex flex-col gap-4 pb-12 px-6">
-        <TextField {...register('name')} type="text" label="Name" error={errors.name?.message} />
-        <TextField {...register('email')} type="email" label="Email" error={errors.email?.message} />
-        <TextField {...register('password')} type="password" label="Password" error={errors.password?.message} />
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full flex-1 h-full flex flex-col gap-4 pb-12 px-6">
+      <TextField {...register('name')} type="text" label="Name" error={errors.name?.message} />
+      <TextField {...register('email')} type="email" label="Email" error={errors.email?.message} />
+      <TextField {...register('password')} type="password" label="Password" error={errors.password?.message} />
 
-        <div className="w-full h-[2px] bg-white rounded-full" />
+      <div className="w-full h-[2px] bg-white rounded-full" />
 
-        <Controller
-          name="pronoun"
-          control={control}
-          render={({ field }) => (
-            <SelectButtons
-              onChange={(choice) => field.onChange(choice)}
-              choices={[
-                {
-                  id: 'he',
-                  label: 'He',
-                },
-                {
-                  id: 'she',
-                  label: 'She',
-                },
-                {
-                  id: 'they',
-                  label: 'They',
-                },
-              ]}
-            />
-          )}
-        />
-
-        {registerMutation.error && (
-          <small className="text-center text-red-600 text-sm">{registerMutation.error.message}</small>
+      <Controller
+        name="pronoun"
+        control={control}
+        render={({ field }) => (
+          <SelectButtons
+            onChange={(choice) => field.onChange(choice)}
+            choices={[
+              {
+                id: 'he',
+                label: 'He',
+              },
+              {
+                id: 'she',
+                label: 'She',
+              },
+              {
+                id: 'they',
+                label: 'They',
+              },
+            ]}
+          />
         )}
+      />
 
-        <div className="flex flex-col mt-auto gap-4 w-full">
-          <PrimaryButton loading={registerMutation.isLoading} type="submit">
-            REGISTER
-          </PrimaryButton>
+      {registerMutation.error && (
+        <small className="text-center text-red-600 text-sm">{registerMutation.error.message}</small>
+      )}
 
-          <SecondaryButton onClick={() => router.push({ ...router, pathname: '/login' })}>LOGIN</SecondaryButton>
-        </div>
-      </form>
-    </>
+      <div className="flex flex-col mt-auto gap-4 w-full">
+        <PrimaryButton loading={registerMutation.isLoading} type="submit">
+          REGISTER
+        </PrimaryButton>
+
+        <SecondaryButton onClick={() => router.push({ ...router, pathname: '/login' })}>LOGIN</SecondaryButton>
+      </div>
+    </form>
   )
 }
+
+RegisterPage.Layout = UnauthenticatedLayout
 
 export default RegisterPage
