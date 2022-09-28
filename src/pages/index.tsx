@@ -10,6 +10,7 @@ import { useToggle } from '../hooks/useToggle'
 import { MainLayout } from '../layouts/main'
 import { useAuthentication } from '../stores/authentication'
 import type { WithLayout } from '../types/next'
+import { parseMoney } from '../utils/money'
 import { parsePronoun } from '../utils/pronouns'
 import { trpc } from '../utils/trpc'
 
@@ -63,8 +64,8 @@ const Home: WithLayout<NextPage> = () => {
               {!balanceQuery.data
                 ? 'You are fine'
                 : balanceQuery.data < 0
-                ? `You owe ${parsePronoun(user?.partner?.pronoun).Him} $${balanceQuery.data * -1}`
-                : `${parsePronoun(user?.partner?.pronoun).He} owes you $${balanceQuery.data}`}
+                ? `You owe ${parsePronoun(user?.partner?.pronoun).Him} ${parseMoney(balanceQuery.data)}`
+                : `${parsePronoun(user?.partner?.pronoun).He} owes you ${parseMoney(balanceQuery.data)}`}
             </>
           </QueryContainer>
         </div>

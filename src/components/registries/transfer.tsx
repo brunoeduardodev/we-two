@@ -1,5 +1,6 @@
 import { PopulatedTransferRegistry } from '../../server/routers/registries'
 import { useAuthentication } from '../../stores/authentication'
+import { parseMoney } from '../../utils/money'
 import { parsePronoun } from '../../utils/pronouns'
 
 type Props = {
@@ -14,7 +15,7 @@ export const Transfer = ({ registry }: Props) => {
   return (
     <div className="flex text-sm flex-col text-brand-100 font-bold py-2 first:pt-0 last:pb-0">
       <p>
-        {agent} sent ${Math.abs(registry.balance)}
+        {agent} sent {parseMoney(registry.balance)}
       </p>
       <small>
         {registry.createdAt.toLocaleString('pt-BR', {

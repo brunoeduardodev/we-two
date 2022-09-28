@@ -1,5 +1,6 @@
 import { PopulatedPurchaseRegistry } from '../../server/routers/registries'
 import { useAuthentication } from '../../stores/authentication'
+import { parseMoney } from '../../utils/money'
 import { parsePronoun } from '../../utils/pronouns'
 
 type Props = {
@@ -14,7 +15,8 @@ export const Purchase = ({ registry }: Props) => {
   return (
     <div className="flex text-sm flex-col text-brand-100 font-bold ">
       <p>
-        {agent} wasted ${Math.abs(registry.balance)} with {registry.purchase.label || registry.purchase.category.name}
+        {agent} wasted {parseMoney(registry.balance, { currency: 'EUR' })} with{' '}
+        {registry.purchase.label || registry.purchase.category.name}
       </p>
       <small>
         {registry.createdAt.toLocaleString('pt-BR', {

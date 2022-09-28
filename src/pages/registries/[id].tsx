@@ -14,6 +14,7 @@ import {
 } from '../../server/routers/registries'
 import { useAuthentication } from '../../stores/authentication'
 import { WithLayout } from '../../types/next'
+import { parseMoney } from '../../utils/money'
 import { ParsedPronoun, parsePronoun } from '../../utils/pronouns'
 import { trpc } from '../../utils/trpc'
 
@@ -39,11 +40,11 @@ function getDivisionText({
 
 function getPurchaseBalanceChange(registry: PopulatedPurchaseRegistry, partnerPronoun: ParsedPronoun) {
   if (registry.balance < 0) {
-    return `${partnerPronoun.he} paid $${Math.abs(registry.balance)} to you.`
+    return `${partnerPronoun.he} paid ${parseMoney(registry.balance)} to you.`
   }
 
   if (registry.balance > 0) {
-    return `You paid $${Math.abs(registry.balance)} to ${partnerPronoun.him}.`
+    return `You paid ${parseMoney(registry.balance)} to ${partnerPronoun.him}.`
   }
 
   return 'There was no balance change'
@@ -71,7 +72,7 @@ const PurchaseDetails = ({ registry }: PurchaseDetailsProps) => {
           >
             {entry.label && <p className="text-sm">{entry.label}</p>}
             <p>
-              ${entry.value} (
+              {parseMoney(entry.value)} (
               {getDivisionText({
                 divisionType: entry.divisionType,
                 userName: user!.name,
@@ -96,7 +97,7 @@ const TransferDetails = ({ registry }: TransferDetailsProps) => {
       <p>From: {registry.transfer.from.name}</p>
       <p>To: {registry.transfer.to.name}</p>
       <p>Date: {registry.createdAt.toLocaleString()}</p>
-      <p>Value: {registry.transfer.value}</p>
+      <p>Value: {parseMoney(registry.transfer.value)}</p>
     </>
   )
 }

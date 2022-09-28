@@ -2,6 +2,7 @@ import { DivisionType } from '@prisma/client'
 import { useMemo } from 'react'
 import { useAddPurchaseStore } from '..'
 import { useAuthentication } from '../../../../stores/authentication'
+import { parseMoney } from '../../../../utils/money'
 import { parsePronoun } from '../../../../utils/pronouns'
 import { DrawerBody, DrawerFooter, DrawerHeader } from '../../../drawer'
 
@@ -82,7 +83,7 @@ export const OverviewStep = ({ onBack, loading, onConfirm }: Props) => {
             <div key={index} className="flex flex-col items-center w-full justify-between mb-2 overflow-y-scroll">
               {entry.label && <p className="text-lg">{entry.label}</p>}
               <p>
-                ${entry.value} (
+                {parseMoney(entry.value)} (
                 {getDivisionText({
                   divisionType: entry.divisionType,
                   userName: user!.name,
