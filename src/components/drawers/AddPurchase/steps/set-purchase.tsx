@@ -34,7 +34,7 @@ export const SetPurchaseStep = ({ onClose, onSetPurchaseInfo }: Props) => {
           labelClassName="text-brand-100"
         />
 
-        <label className={'text-brand-100 font-bold'}>Who Sent?</label>
+        <label className={'text-brand-100 font-bold'}>Who Is Paying?</label>
 
         <Controller
           name="payer"
