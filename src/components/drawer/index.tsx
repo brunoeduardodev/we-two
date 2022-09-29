@@ -11,7 +11,7 @@ type DrawerProps = {
 }
 
 export const DrawerBody = ({ children }: PropsWithChildren) => {
-  return <div className="flex flex-col w-full h-full pb-6 items-center gap-4">{children}</div>
+  return <div className="flex flex-col w-full h-full pb-6 items-center gap-4 overflow-y-auto">{children}</div>
 }
 
 type DrawerFooterProps = {
