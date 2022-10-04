@@ -34,7 +34,6 @@ export const EntryPage = ({ entry, onAddEntry, onUpdateEntry, onRemove, onBack, 
     control,
     handleSubmit,
     reset,
-    getValues,
     formState: { errors, isValid },
   } = useForm<AddEntry>({
     resolver: zodResolver(addEntrySchema),
@@ -64,8 +63,6 @@ export const EntryPage = ({ entry, onAddEntry, onUpdateEntry, onRemove, onBack, 
     reset()
   }
 
-  const { divisionType } = getValues()
-
   return (
     <div className="w-full h-full flex flex-col items-center gap-4">
       <TextField
@@ -93,7 +90,7 @@ export const EntryPage = ({ entry, onAddEntry, onUpdateEntry, onRemove, onBack, 
         render={({ field }) => (
           <SelectButtons
             onChange={(choice) => field.onChange(choice)}
-            value={divisionType}
+            value={field.value}
             choices={[
               {
                 id: 'creator',
