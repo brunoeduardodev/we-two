@@ -30,7 +30,7 @@ export const useAuthentication = create(
         const tokenExpiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toString()
 
         set((state) => ({ ...state, user, token, tokenExpiration, signedIn: true }))
-        Cookies.set('@wetwo/auth-token', token)
+        Cookies.set('@wetwo/auth-token', token, { expires: new Date(tokenExpiration) })
       },
 
       logout: () => {
