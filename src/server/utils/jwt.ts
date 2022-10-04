@@ -8,15 +8,18 @@ export type UserTokenData = {
   userId: string
 }
 
+const THREE_DAYS_IN_SECONDS = 3 * 24 * 60 * 60
+
 export const generateUserToken = (user: User) => {
   const token = jwt.sign(
     {
       userId: user.id,
     },
-    env.JWT_SECRET
+    env.JWT_SECRET,
+    { expiresIn: `${THREE_DAYS_IN_SECONDS}s` }
   )
 
-  return `Bearer ${token}`
+  return { token: `Bearer ${token}`, expiresInSeconds: THREE_DAYS_IN_SECONDS }
 }
 
 export const getUserFromToken = async (userToken?: string) => {

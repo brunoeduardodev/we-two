@@ -2,6 +2,7 @@ import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import Cookies from 'js-cookie'
 import { SafeUser } from '../server/selects/user'
+import jwt from 'jsonwebtoken'
 
 type Authentication = {
   token: string | null
@@ -9,9 +10,12 @@ type Authentication = {
 
   signedIn: boolean
 
-  authenticate: (data: { token: string; user: SafeUser }) => void
+  tokenExpiration: string | null
+  authenticate: (data: { token: string; user: SafeUser; expiresInSeconds: number }) => void
   setUser: (data: SafeUser) => void
   logout: () => void
+
+  checkTokenExpiration: () => void
 }
 
 export const useAuthentication = create(
@@ -19,10 +23,13 @@ export const useAuthentication = create(
     (set, get) => ({
       token: null,
       user: null,
+      tokenExpiration: null,
       signedIn: false,
 
-      authenticate: ({ token, user }) => {
-        set((state) => ({ ...state, user, token, signedIn: true }))
+      authenticate: ({ token, user, expiresInSeconds }) => {
+        const tokenExpiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toString()
+
+        set((state) => ({ ...state, user, token, tokenExpiration, signedIn: true }))
         Cookies.set('@wetwo/auth-token', token)
       },
 
@@ -33,6 +40,7 @@ export const useAuthentication = create(
           token: null,
           user: null,
           signedIn: false,
+          tokenExpiration: null,
         }))
       },
 
@@ -41,6 +49,19 @@ export const useAuthentication = create(
           ...state,
           user,
         }))
+      },
+
+      checkTokenExpiration: () => {
+        set((state) => {
+          if (!state.token || !state.tokenExpiration) return state
+          const now = new Date()
+
+          if (now > new Date(state.tokenExpiration)) {
+            return { ...state, token: null, tokenExpiration: null, user: null, signedIn: false }
+          }
+
+          return state
+        })
       },
     }),
     { name: 'authentication' }

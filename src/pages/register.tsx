@@ -28,8 +28,8 @@ const RegisterPage: WithLayout<NextPage> = () => {
   })
 
   const registerMutation = trpc.authentication.register.useMutation({
-    onSuccess({ token, user }) {
-      authenticate({ token, user })
+    onSuccess({ token, user, expiresInSeconds }) {
+      authenticate({ token, user, expiresInSeconds })
 
       router.push({
         pathname: '/',

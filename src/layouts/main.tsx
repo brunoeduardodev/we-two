@@ -8,6 +8,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   const router = useRouter()
   const signedIn = useAuthentication((state) => state.signedIn)
   const hasPartner = useAuthentication((state) => !!state.user?.partnerId)
+  const checkTokenExpiration = useAuthentication((state) => state.checkTokenExpiration)
 
   const [clientSide, setClientSide] = useState(false)
 
@@ -31,6 +32,10 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
 
     setClientSide(true)
   }, [signedIn, hasPartner, router.query.code])
+
+  useEffect(() => {
+    checkTokenExpiration()
+  }, [checkTokenExpiration])
 
   if (!signedIn || !clientSide) return <></>
 

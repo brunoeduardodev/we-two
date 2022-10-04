@@ -27,8 +27,8 @@ const LoginPage: WithLayout<NextPage> = () => {
   })
 
   const loginMutation = trpc.authentication.login.useMutation({
-    onSuccess({ token, user }) {
-      authenticate({ token, user })
+    onSuccess({ token, user, expiresInSeconds }) {
+      authenticate({ token, user, expiresInSeconds })
       router.push({
         ...router,
         pathname: '/',

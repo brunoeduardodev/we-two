@@ -17,9 +17,9 @@ export const authenticationRouter = t.router({
     const isPasswordValid = bcrypt.compare(password, userWithSameEmail.password)
     if (!isPasswordValid) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid Credentials' })
 
-    const token = generateUserToken(userWithSameEmail)
+    const { token, expiresInSeconds } = generateUserToken(userWithSameEmail)
 
-    return { token, user: userWithSameEmail }
+    return { token, user: userWithSameEmail, expiresInSeconds }
   }),
 
   register: t.procedure.input(registerSchema).mutation(async ({ input }) => {
@@ -42,8 +42,7 @@ export const authenticationRouter = t.router({
       },
     })
 
-    const token = generateUserToken(user)
-
-    return { token, user }
+    const { token, expiresInSeconds } = generateUserToken(user)
+    return { token, user, expiresInSeconds }
   }),
 })
