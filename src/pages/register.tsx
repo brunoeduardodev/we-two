@@ -1,11 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { PrimaryButton } from '../components/buttons/primary'
-import { SecondaryButton } from '../components/buttons/secondary'
-import { Header } from '../components/header'
+import { OutlineButton } from '../components/buttons/secondary'
+import { ErrorProne } from '../components/helpers/error-prone'
 import { SelectButtons } from '../components/inputs/select-buttons'
 import { TextField } from '../components/inputs/text-field'
 import { UnauthenticatedLayout } from '../layouts/unauthenticated'
@@ -77,16 +76,14 @@ const RegisterPage: WithLayout<NextPage> = () => {
         )}
       />
 
-      {registerMutation.error && (
-        <small className="text-center text-red-600 text-sm">{registerMutation.error.message}</small>
-      )}
-
       <div className="flex flex-col mt-auto gap-4 w-full">
-        <PrimaryButton loading={registerMutation.isLoading} type="submit">
-          REGISTER
-        </PrimaryButton>
+        <ErrorProne error={registerMutation.error?.message}>
+          <PrimaryButton loading={registerMutation.isLoading} type="submit">
+            REGISTER
+          </PrimaryButton>
+        </ErrorProne>
 
-        <SecondaryButton onClick={() => router.push({ ...router, pathname: '/login' })}>LOGIN</SecondaryButton>
+        <OutlineButton onClick={() => router.push({ ...router, pathname: '/login' })}>LOGIN</OutlineButton>
       </div>
     </form>
   )

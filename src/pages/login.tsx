@@ -1,12 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { PrimaryButton } from '../components/buttons/primary'
-import { SecondaryButton } from '../components/buttons/secondary'
-import { Header } from '../components/header'
+import { OutlineButton } from '../components/buttons/secondary'
+import { ErrorProne } from '../components/helpers/error-prone'
 import { TextField } from '../components/inputs/text-field'
 import { UnauthenticatedLayout } from '../layouts/unauthenticated'
 import { loginSchema, LoginSchema } from '../schemas/login'
@@ -49,14 +47,14 @@ const LoginPage: WithLayout<NextPage> = () => {
       <TextField {...register('email')} type="text" label="Email" error={errors.email?.message} />
       <TextField {...register('password')} type="password" label="Password" error={errors.password?.message} />
 
-      {loginMutation.error && <small className="text-center text-red-600 text-sm">{loginMutation.error.message}</small>}
-
       <div className="flex flex-col mt-auto gap-4 w-full">
-        <PrimaryButton loading={loginMutation.isLoading} type="submit">
-          LOGIN
-        </PrimaryButton>
+        <ErrorProne error={loginMutation.error?.message}>
+          <PrimaryButton loading={loginMutation.isLoading} type="submit">
+            LOGIN
+          </PrimaryButton>
+        </ErrorProne>
 
-        <SecondaryButton onClick={() => router.push({ ...router, pathname: '/register' })}>REGISTER</SecondaryButton>
+        <OutlineButton onClick={() => router.push({ ...router, pathname: '/register' })}>REGISTER</OutlineButton>
       </div>
     </form>
   )

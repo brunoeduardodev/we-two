@@ -1,6 +1,5 @@
 import classNames from 'classnames'
-import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
-import { ButtonProps } from './types'
+import { ButtonProps } from './root'
 
 type Props = {} & ButtonProps
 

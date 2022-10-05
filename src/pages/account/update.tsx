@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { NextPage } from 'next'
 import { Controller, useForm } from 'react-hook-form'
 import { PrimaryButton } from '../../components/buttons/primary'
+import { ErrorProne } from '../../components/helpers/error-prone'
 import { SelectButtons } from '../../components/inputs/select-buttons'
 import { TextField } from '../../components/inputs/text-field'
 import { MainLayout } from '../../layouts/main'
@@ -74,9 +75,11 @@ const UpdateProfilePage: WithLayout<NextPage> = () => {
           )}
         />
 
-        <PrimaryButton type="submit" loading={updateMutation.isLoading} error={updateMutation.error?.message}>
-          UPDATE
-        </PrimaryButton>
+        <ErrorProne error={updateMutation.error?.message}>
+          <PrimaryButton type="submit" loading={updateMutation.isLoading}>
+            UPDATE
+          </PrimaryButton>
+        </ErrorProne>
       </form>
     </>
   )
